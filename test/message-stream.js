@@ -22,8 +22,30 @@ contract('MessageStream', function(accounts) {
       assert.equal("Title", result[0]);
       assert.equal("Body", result[1]);
     });
+  });
 
+  context("getMessage", function() {
+    context("with the index of the last inserted messages (0)", function() {
+      it("return the message in that index", function() {
+        return MessageStream.deployed().then(function(instance) {
+          return instance.getMessage.call(0);
+        }).then(function(result) {
+          assert.equal("Body", result[1]);
+          return assert.equal("Title", result[0]);
+        });
+      });
+    });
+  });
 
-  })
-
-})
+  context("getNumberOfMessages", function() {
+    context("having one message (creted in the previous test)", function() {
+      it("returns 1", function() {
+        return MessageStream.deployed().then(function(instance) {
+          return instance.getNumberOfMessages.call()
+        }).then(function(result) {
+          return assert.equal(result, 1);
+        });
+      });
+    });
+  });
+});
