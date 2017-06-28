@@ -38,6 +38,7 @@ window.App = {
       accounts = accs;
       account = accounts[0];
 
+      self.refreshBalance();
 
     });
 
@@ -49,6 +50,20 @@ window.App = {
       })
     });
   },
+
+  refreshBalance: function() {
+    var self = this;
+
+    var balance = web3.fromWei(web3.eth.getBalance(account)); 
+
+    var balance_element = document.getElementById("balance");
+    balance_element.innerHTML = balance;
+
+    var account_element = document.getElementById("account");
+    account_element.innerHTML = account;
+  
+  },
+
 
   setStatus: function(message) {
     var status = document.getElementById("status");
@@ -81,7 +96,8 @@ window.addEventListener('load', function() {
   } else {
     console.warn("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-    window.web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.1.25:8545"));
+    //window.web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.1.25:8545"));
+    window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
   }
 
   App.start();

@@ -19,11 +19,12 @@ contract MessageStream {
     }
 
     function sendMessage(string _title, string _body) {
-      Message memory m = Message({timestamp: now, title: _title, body: _body});
+      Message memory m = Message(22, _title, _body);
       _messages[_numberOfMessages] = m;
       _numberOfMessages++;
 
-      MessageReceived(m.title, m.body, m.timestamp);
+      //MessageReceived(m.title, m.body, m.timestamp);
+      MessageReceived(_title, _body, 22);
     }
 
     function getLastMessage() returns(string title, string body, uint timestamp) {
