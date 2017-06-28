@@ -44,7 +44,7 @@ window.App = {
 
     var self = this;
     MessageStream.deployed().then(function(instance) {
-      instance.MessageReceived().watch(function(err, result) {
+      instance.GetMessage.watch(function(err, result) {
         if(err) {return;}
         self.messageReceved(result.args.title, result.args.body);
       })
@@ -64,6 +64,18 @@ window.App = {
   
   },
 
+
+  getMessages: function() {
+    var self = this;
+
+    
+    MessageStream.deployed().then(function(instance) {
+      instance.MessageReceived().watch(function(err, result) {
+        if(err) {return;}
+        self.messageReceved(result.args.title, result.args.body);
+      })
+    });
+  },
 
   setStatus: function(message) {
     var status = document.getElementById("status");
