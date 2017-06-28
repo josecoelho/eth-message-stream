@@ -45,7 +45,7 @@ window.App = {
     MessageStream.deployed().then(function(instance) {
       instance.MessageReceived().watch(function(err, result) {
         if(err) {return;}
-        self.messageReceved(result.args._title, result.args._body);
+        self.messageReceved(result.args.title, result.args.body);
       })
     });
   },
