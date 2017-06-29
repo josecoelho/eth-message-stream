@@ -40,6 +40,10 @@ window.App = {
 
       self.refreshBalance();
       self.populateAccoutSwitcherHTML();
+
+      self.handleToggleShowButton('account-switcher-open', 'account-switcher-wrapper');
+      self.handleToggleShowButton('message-sender-open', 'message-sender');
+
       self.getMessages();
     });
 
@@ -62,6 +66,7 @@ window.App = {
     account = accounts[index];
     this.refreshBalance();
     this.getMessages();
+    this.toggleShowElement(document.getElementById('account-switcher-wrapper'));
   },
 
   refreshBalance: function() {
@@ -70,7 +75,7 @@ window.App = {
     var balance = web3.fromWei(web3.eth.getBalance(account));
 
     var balance_element = document.getElementById("balance");
-    balance_element.innerHTML = balance;
+    balance_element.innerHTML = balance.toFixed(2);
 
     var account_element = document.getElementById("account");
     account_element.innerHTML = account;
@@ -110,6 +115,7 @@ window.App = {
   sendMessage: function(evt) {
     var title = document.getElementById("title").value;
     var body = document.getElementById("message_body").value;
+    this.toggleShowElement(document.getElementById('message-sender'));
 
     MessageStream.deployed().then(function(instance) {
       return instance.sendMessage(title, body, {from: account, gas: 3000000});
@@ -132,6 +138,22 @@ window.App = {
       if(!result) { return; }
       self.updateOrPrependMessagesHTML(index, result[0], result[1], result[2], result[3]);
     });
+  },
+
+  handleToggleShowButton: function(buttonId, targetId) {
+    var self = this;
+    var button = document.getElementById(buttonId);
+    button.addEventListener('click', function() {
+      self.toggleShowElement(document.getElementById(targetId));
+    });
+  },
+
+  toggleShowElement: function(element) {
+    if(element.style.display == 'none') {
+      element.style.display = 'block';
+    } else {
+      element.style.display = 'none';
+    }
   },
 
   populateAccoutSwitcherHTML: function() {
