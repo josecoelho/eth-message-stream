@@ -40,7 +40,7 @@ window.App = {
 
       self.refreshBalance();
       self.populateAccoutSwitcherHTML();
-
+      self.getMessages();
     });
 
     var self = this;
@@ -49,7 +49,11 @@ window.App = {
       instance.MessageReceived().watch(function(err, result) {
         console.log("event received");
         if(err) {return;}
-        self.getMessages();
+        self.updateOrPrependMessagesHTML(result.args.index,
+            result.args.title,
+            result.args.body,
+            result.args.created_at,
+            result.args.likes);
       })
     });
   },
@@ -93,7 +97,7 @@ window.App = {
           self.clearMessagesHTML();
           for (var i = 0; i < results.length; i++) {
             var result = results[i];
-            self.prependMessagesHTML(i, result[0], result[1], result[2], result[3]);
+            self.updateOrPrependMessagesHTML(i, result[0], result[1], result[2], result[3]);
           }
         });
   },
@@ -115,13 +119,18 @@ window.App = {
   likeMessage: function(index) {
     console.log("Like:"+index);
     var self  = this;
+    var contract;
     MessageStream.deployed().then(function(instance) {
-      return instance.likeMessage(index, {from: account, gas: 3000000})
+      contract = instance;
+      return contract.likeMessage(index, {from: account, gas: 3000000})
     }).catch(function() {
       alert("You can not like your own message!");
     }).then(function(result) {
       if(!result) { return; }
-      self.getMessages();
+      return contract.getMessage.call(index);
+    }).then(function(result) {
+      if(!result) { return; }
+      self.updateOrPrependMessagesHTML(index, result[0], result[1], result[2], result[3]);
     });
   },
 
@@ -149,10 +158,8 @@ window.App = {
     return new Date(timestamp * 1e3).toISOString().slice(-13, -5);
   },
 
-  prependMessagesHTML: function(index, title, body, created_at, likes) {
-    var self = this;
+  populateMessageTemplate: function(index, title, body, created_at, likes) {
 
-    var list = document.getElementById("message-stream");
     var template = document.getElementById("message-template").innerHTML;
 
     var message = document.createElement("div");
@@ -163,16 +170,32 @@ window.App = {
       .replace('{{body}}', body)
       .replace('{{likes}}', likes)
       .replace('{{date}}', this.formatDate(created_at));
+    return message;
+  },
 
-
-    list.insertBefore(message, list.childNodes[0]);
-
-    var likeButton = message.getElementsByClassName("message-like")[0];
+  setupLikeEventListener: function(messageEl) {
+    var self = this;
+    var likeButton = messageEl.getElementsByClassName("message-like")[0];
 
     likeButton.addEventListener('click', function(evt) {
       self.likeMessage(this.value);
     });
-  }
+  },
+
+  updateOrPrependMessagesHTML: function(index, title, body, created_at, likes) {
+    var message = this.populateMessageTemplate(index, title, body, created_at, likes);
+
+    var currentEl = document.getElementById("message-"+index);
+    if(currentEl) {
+      currentEl.innerHTML = message.innerHTML;
+      this.setupLikeEventListener(currentEl);
+    } else {
+      var list = document.getElementById("message-stream");
+      list.insertBefore(message, list.childNodes[0]);
+      this.setupLikeEventListener(message);
+    }
+
+  },
 
 };
 
