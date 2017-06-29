@@ -56,6 +56,7 @@ window.App = {
         self.updateOrPrependMessagesHTML(result.args.index,
             result.args.title,
             result.args.body,
+            result.args.imageUrl,
             result.args.created_at,
             result.args.likes);
       })
@@ -102,7 +103,7 @@ window.App = {
           self.clearMessagesHTML();
           for (var i = 0; i < results.length; i++) {
             var result = results[i];
-            self.updateOrPrependMessagesHTML(i, result[0], result[1], result[2], result[3]);
+            self.updateOrPrependMessagesHTML(i, result[0], result[1], result[2], result[3], result[4]);
           }
         });
   },
@@ -115,10 +116,11 @@ window.App = {
   sendMessage: function(evt) {
     var title = document.getElementById("title").value;
     var body = document.getElementById("message_body").value;
+    var image = document.getElementById("message_image").value;
     this.toggleShowElement(document.getElementById('message-sender'));
 
     MessageStream.deployed().then(function(instance) {
-      return instance.sendMessage(title, body, {from: account, gas: 3000000});
+      return instance.sendMessage(title, body, image, {from: account, gas: 3000000});
     })
   },
 
@@ -136,7 +138,7 @@ window.App = {
       return contract.getMessage.call(index);
     }).then(function(result) {
       if(!result) { return; }
-      self.updateOrPrependMessagesHTML(index, result[0], result[1], result[2], result[3]);
+      self.updateOrPrependMessagesHTML(index, result[0], result[1], result[2], result[3], result[4]);
     });
   },
 
@@ -180,18 +182,27 @@ window.App = {
     return new Date(timestamp * 1e3).toISOString().slice(-13, -5);
   },
 
-  populateMessageTemplate: function(index, title, body, created_at, likes) {
+  populateMessageTemplate: function(index, title, body, imageUrl, created_at, likes) {
 
     var template = document.getElementById("message-template").innerHTML;
 
     var message = document.createElement("div");
     message.id = "message-"+index;
-    message.innerHTML = template
+
+    var templateHTML = template
       .replace('{{index}}', index)
       .replace('{{title}}', title)
       .replace('{{body}}', body)
       .replace('{{likes}}', likes)
       .replace('{{date}}', this.formatDate(created_at));
+
+    if(imageUrl) {
+      templateHTML = templateHTML.replace('{{image}}', "<img src=\""+imageUrl+"\" class='thumb-image'>")
+    } else {
+      templateHTML = templateHTML.replace('{{image}}', "")
+    }
+    message.innerHTML = templateHTML;
+
     return message;
   },
 
@@ -204,8 +215,8 @@ window.App = {
     });
   },
 
-  updateOrPrependMessagesHTML: function(index, title, body, created_at, likes) {
-    var message = this.populateMessageTemplate(index, title, body, created_at, likes);
+  updateOrPrependMessagesHTML: function(index, title, body, imageUrl, created_at, likes) {
+    var message = this.populateMessageTemplate(index, title, body, imageUrl, created_at, likes);
 
     var currentEl = document.getElementById("message-"+index);
     if(currentEl) {

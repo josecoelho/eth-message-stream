@@ -9,11 +9,12 @@ contract('MessageStream', function(accounts) {
             var evt = instance.MessageReceived().watch(function(err, response) {
               assert.equal(response.args.title, "First Message");
               assert.equal(response.args.body, "Body");
+              assert.equal(response.args.imageUrl, "http://image.jpg");
               evt.stopWatching();
               done();
             });
 
-            instance.sendMessage("First Message", "Body", {from: accounts[0]});
+            instance.sendMessage("First Message", "Body", "http://image.jpg", {from: accounts[0]});
           });
         });
 
@@ -51,7 +52,7 @@ contract('MessageStream', function(accounts) {
             var contract;
             return MessageStream.deployed().then(function(instance) {
               contract = instance;
-              return contract.sendMessage("Second Message", "Second Body", {from: accounts[1]});
+              return contract.sendMessage("Second Message", "Second Body", "http://image.jpg", {from: accounts[1]});
             }).then(function(sendMessageResult) {
               return contract.getMessage.call(1);
             }).then(function(result) {
@@ -86,7 +87,7 @@ contract('MessageStream', function(accounts) {
             }).then(function(result) {
               return contract.getMessage.call(0);
             }).then(function(result) {
-              assert.equal(1, result[3]);
+              assert.equal(1, result[4]);
 
               return true;
             });

@@ -24,13 +24,14 @@
 
   <div id="message-sender" class="content-block" style="display: none;">
     <h2>Send Message</h2>
-    <label for="title">Title:</label> <input type="text" id="title" placeholder="e.g., Hello World" />
+    <label for="title">Title:</label> <input type="text" id="title" placeholder="The best title for your message" />
     <br><label for="message_body">Body:</label>
-        <input type="text" id="message_body" placeholder="e.g., The body of your lovely message :)" />
+        <input type="text" id="message_body" placeholder="The body of your lovely message :)" />
+    <br><label for="message_image">Image:</label>
+        <input type="text" id="message_image" placeholder="The url of an image" />
 
-    <br><br><button id="send" onclick="App.sendMessage()">Send Message</button>
-    <br><br>
-    <span id="status"></span>
+    <br/>
+    <br><button id="send" onclick="App.sendMessage()">Send Message</button>
   </div>
 
   <div id="messages_wrapper">
@@ -43,7 +44,7 @@
     <div class="card-container">
       <div class="card message-card link-message">
         <div class="card-media">
-            <!-- <img src="<%= message.asset.url %>" class='thumb-image'> -->
+          {{image}}
         </div>
 
         <div class="card-header">

@@ -4,6 +4,7 @@ contract MessageStream {
     struct Message {
       string title;
       string body;
+      string imageUrl;
       uint created_at;
       uint likes;
       address owner;
@@ -14,24 +15,25 @@ contract MessageStream {
     /* "array" of messages */
     mapping(uint => Message) _messages;
 
-    event MessageReceived(uint index, string title, string body, uint created_at, uint likes);
+    event MessageReceived(uint index, string title, string body, string imageUrl, uint created_at, uint likes);
 
     function MessageStream() {
       _numberOfMessages = 0;
     }
 
-    function sendMessage(string _title, string _body) {
-      Message memory m = Message(_title, _body, now, 0, msg.sender);
+    function sendMessage(string _title, string _body, string _imageUrl) {
+      Message memory m = Message(_title, _body, _imageUrl, now, 0, msg.sender);
       _messages[_numberOfMessages] = m;
 
-      MessageReceived(_numberOfMessages, m.title, m.body, m.created_at, m.likes);
+      MessageReceived(_numberOfMessages, m.title, m.body, m.imageUrl, m.created_at, m.likes);
       _numberOfMessages++;
     }
 
-    function getMessage(uint index) returns(string title, string body, uint created_at, uint likes) {
+    function getMessage(uint index) returns(string title, string body, string imageUrl, uint created_at, uint likes) {
       Message m = _messages[index];
       title = m.title;
       body = m.body;
+      imageUrl = m.imageUrl;
       created_at = m.created_at;
       likes = m.likes;
     }

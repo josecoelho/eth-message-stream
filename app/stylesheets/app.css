@@ -1,11 +1,4 @@
  
-body {
-  margin-left: 25%;
-  margin-right: 25%;
-  margin-top: 10%;
-  font-family: "Open Sans", sans-serif;
-}
-
 label {
   display: inline-block;
   width: 100px;
@@ -226,7 +219,7 @@ body {
 }
 
 .card-body {
-  padding: 0 15px 14px;
+  padding: 0 15px 40px;
 }
 
 .card-body p {
