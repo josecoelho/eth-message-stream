@@ -1,52 +1,197 @@
-body {
-  margin-left: 25%;
-  margin-right: 25%;
-  margin-top: 10%;
-  font-family: "Open Sans", sans-serif;
-}
-
-label {
-  display: inline-block;
-  width: 100px;
-}
-
-input {
-  width: 500px;
-  padding: 5px;
-  font-size: 16px;
-}
-
-button {
-  font-size: 16px;
-  padding: 5px;
-}
-
-h1, h2 {
-  display: inline-block;
-  vertical-align: middle;
-  margin-top: 0px;
-  margin-bottom: 10px;
-}
-
-h2 {
-  color: #AAA;
-  font-size: 32px;
-}
-
-h3 {
+ @font-face {
+  font-family: 'carnival-icons';
+  src:url('https://s3.amazonaws.com/carnivalmobile-assets/register-api/assets/carnival_icons/carnival-icons.eot?');
+  src:url('https://s3.amazonaws.com/carnivalmobile-assets/register-api/assets/carnival_icons/carnival-icons.eot?#iefix') format('embedded-opentype'),
+      url('https://s3.amazonaws.com/carnivalmobile-assets/register-api/assets/carnival_icons/carnival-icons.woff?') format('woff'),
+      url('https://s3.amazonaws.com/carnivalmobile-assets/register-api/assets/carnival_icons/carnival-icons.ttf?') format('truetype'),
+      url('https://s3.amazonaws.com/carnivalmobile-assets/register-api/assets/carnival_icons/carnival-icons.svg?#carnival-icons') format('svg');
   font-weight: normal;
-  color: #AAA;
+  font-style: normal;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  background-color: #eaeef1;
+  background-size: 100%;
+  background-attachment: fixed;
+  background-repeat: repeat-y;
+  -webkit-font-smoothing: antialiased;
+
+  
+}
+
+.glyphicon {
+  font-family: 'carnival-icons';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.glyphicon-cog:before {
+  content: "\e611";
+}
+.glyphicon-user:before {
+  content: "\e616";
+}
+.glyphicon-like:before {
+  content: "\e612";
+}
+.glyphicon-image-message:before {
+  content: "\e60b";
+}
+.glyphicon-link-message:before {
+  content: "\e60c";
+}
+.glyphicon-push-message:before {
+  content: "\e60d";
+}
+.glyphicon-text-message:before {
+  content: "\e60e";
+}
+.glyphicon-video-message:before {
+  content: "\e60f";
+}
+.glyphicon-fake-call-message:before {
+  content: "\e615";
+}
+
+#message-stream {
+  position: relative;
+  max-width: 640px;
+  width: 92%;
+  height: 100%;
+  margin: 1em auto;
+}
+
+.card-container {
+  position: relative;
+  margin-bottom: 18px;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.card-container .card-type-icon {
+  color: #d2d8dc;
+}
+
+.message-card {
+  border: 2px solid #fff;
+}
+
+.card {
+  background: #fff;
+  border-radius: 2px;
+
+  
+}
+
+.card > a {
+  display: block;
+  text-decoration: none;
+}
+
+.card > a:focus {
+  outline: 0;
+}
+
+.card-media img,
+.card-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.card-header {
+  position: relative;
+  padding: 15px;
+}
+
+.card-header:before,
+.card-header:after {
+  content: '';
+  display: table;
+}
+
+.card-header:after {
+  clear: both;
+}
+
+.card-heading {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  font-size: 20px;
+  line-height: 1em;
+  font-weight: 600;
+  color: #1e2124;
+  padding: 0;
+  margin: 2px 15px 6px 0px;
+
+  
+}
+
+.card-date {
+  color: #657079;
   font-size: 12px;
+  line-height: 1em;
+  margin: 0 15px 0px 0px;
 }
 
-.black {
-  color: black;
+.card-body {
+  padding: 0 15px 14px;
 }
 
-#balance {
-  color: black;
+.card-body p {
+  line-height: 1.2em;
+  margin: 16px 0;
+  color: #1e2124;
+
+  
 }
 
-.hint {
-  color: #666;
+.card-body a {
+  color: #03b3ed;
+
+  
+}
+
+.no-messages-text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 2px;
+}
+
+.card-container + .no-messages-text {
+  display: none;
+}
+
+.remove-message-x {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: #000;
+  width: 26px;
+  height: 26px;
+  background: url(https://s3.amazonaws.com/carnivalmobile-assets/register-api/assets/x-icon.png);
+  background-size: 100%;
+  z-index: 999;
 }

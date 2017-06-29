@@ -105,7 +105,7 @@ window.App = {
 
   sendMessage: function(evt) {
     var title = document.getElementById("title").value;
-    var body = document.getElementById("_body").value;
+    var body = document.getElementById("message_body").value;
 
     MessageStream.deployed().then(function(instance) {
       return instance.sendMessage(title, body, {from: account, gas: 3000000});
@@ -141,26 +141,39 @@ window.App = {
   },
 
   clearMessagesHTML: function() {
-    var list = document.getElementById("messages");
+    var list = document.getElementById("message-stream");
     list.innerHTML = "";
+  },
+
+  formatDate: function(timestamp) {
+    return new Date(timestamp * 1e3).toISOString().slice(-13, -5);
   },
 
   prependMessagesHTML: function(index, title, body, created_at, likes) {
     var self = this;
-    var list = document.getElementById("messages");
-    var imageEl = document.createElement("li");
-    var likeButton = document.createElement("button");
-    likeButton.value = index;
-    likeButton.innerHTML = likes+" Likes";
+
+    var list = document.getElementById("message-stream");
+    var template = document.getElementById("message-template").innerHTML;
+
+    var message = document.createElement("div");
+    message.id = "message-"+index;
+    message.innerHTML = template
+      .replace('{{index}}', index)
+      .replace('{{title}}', title)
+      .replace('{{body}}', body)
+      .replace('{{likes}}', likes)
+      .replace('{{date}}', this.formatDate(created_at));
+
+
+    list.insertBefore(message, list.childNodes[0]);
+
+    var likeButton = message.getElementsByClassName("message-like")[0];
 
     likeButton.addEventListener('click', function(evt) {
       self.likeMessage(this.value);
     });
-
-    imageEl.innerHTML = title+ ": "+ body;
-    imageEl.appendChild(likeButton);
-    list.insertBefore(imageEl, list.childNodes[0]);
   }
+
 };
 
 window.addEventListener('load', function() {

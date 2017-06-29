@@ -8,35 +8,52 @@
 <body>
   <h1>Message Stream</h1>
 
-  <br>
-  
   <div id="account-switcher-wrapper">
-    <label for="accoun-switcher">Select your account</label>
+    <a id="account-switcher-open" ><i class="glyphicon glyphicon-user"></i></a>
+    <label for="accoun-switcher">Change user</label>
     <select id="account-switcher">
     </select>
   </div>
 
   <div id="balance-wrapper">
-    <h3>You have <span class="black"><span id="balance"></span> META</span> in account <span class="black"><span id="account"></span></h3>
+    <h3>You have <span class="black"><span id="balance"></span> META</span> in account <span class="black"><span id="account"></span></span></h3>
   </div>
 
   <div id="message-sender">
     <h1>Send Message</h1>
-    <br><label for="title">Title:</label><input type="text" id="title" placeholder="e.g., Hello World"></input>
-    <br><label for="_body">Body:</label>
-        <input type="text" id="_body" placeholder="e.g., The body of your lovely message :)"></input>
+    <br><label for="title">Title:</label><input type="text" id="title" placeholder="e.g., Hello World" />
+    <br><label for="message_body">Body:</label>
+        <input type="text" id="message_body" placeholder="e.g., The body of your lovely message :)" />
 
     <br><br><button id="send" onclick="App.sendMessage()">Send Message</button>
     <br><br>
     <span id="status"></span>
   </div>
+    <div id="messages_wrapper">
+      <h2>Received Messages</h2>
+      <div id="message-stream">
+      </div>
+    </div>
 
-  <div id="messages_wrapper">
-    <h2>Received Messages</h2>
-    <ul id="messages">
-      
-    </ul>
-  </div>
-  <span class="hint"><strong>Hint:</strong> open the browser developer console to view any errors and warnings.</span>
+
+    <div id="message-template" class="card-container" style="display: none;">
+      <div class="card-container">
+        <div class="card message-card link-message">
+          <div class="card-media">
+              <!-- <img src="<%= message.asset.url %>" class='thumb-image'> -->
+          </div>
+
+          <div class="card-header">
+            <h4 class="heading card-heading">{{title}}</h4>
+            <div class="card-date">{{date}}</div>
+            <button class="message-like" value="{{index}}">{{likes}} <i class="glyphicon glyphicon-like"></i></button>
+          </div>
+
+          <div class="card-body markdown-body">
+            {{body}}
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>
