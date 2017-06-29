@@ -17,6 +17,17 @@ var MessageStream = contract(messagestream_artifacts);
 var accounts;
 var account;
 
+function getBase64(file) {
+   var reader = new FileReader();
+   reader.readAsDataURL(file);
+   reader.onload = function () {
+     console.log(reader.result);
+   };
+   reader.onerror = function (error) {
+     console.log('Error: ', error);
+   };
+}
+
 window.App = {
   start: function() {
     var self = this;
@@ -89,7 +100,7 @@ window.App = {
 
         }).then(function(results) {
           console.log("Results: " + results);
-          
+
           self.clearMessagesHTML();
           for (var i = 0; i < results.length; i++) {
             self.prependMessagesHTML(results[i][0], results[i][1]);
@@ -105,6 +116,12 @@ window.App = {
   sendMessage: function(evt) {
     var title = document.getElementById("title").value;
     var body = document.getElementById("_body").value;
+
+
+    var files = document.getElementById("_file");
+    if (files.length > 0) {
+      getBase64(files[0]); // prints the base64 string
+    }
 
     MessageStream.deployed().then(function(instance) {
       return instance.sendMessage(title, body, {from: account, gas: 3000000});
