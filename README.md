@@ -11,7 +11,7 @@ This project is part of the Hackdays Sailtrhu.
 3. "Replicate" our Message Stream on the blockchain
 4. Make our Messages stateful and ‘smart’
   - Can’t ‘like’ a message you published
-  
+
 ## Screenshots
 
 <img width="700" alt="screen shot 2017-06-30 at 08 41 59" src="https://user-images.githubusercontent.com/1987013/27709447-3fad13bc-5d70-11e7-8d5a-4aadcf801eb6.png">
@@ -22,8 +22,27 @@ This project is part of the Hackdays Sailtrhu.
 
 <img width="687" alt="screen shot 2017-06-30 at 08 42 16" src="https://user-images.githubusercontent.com/1987013/27709453-44949670-5d70-11e7-8313-be6e11874939.png">
 
+## Setup
+
+1. `yarn install`
+2. Setup a virtual machine to run `testrpc` locally
+  - `git clone git@github.com:b9lab/truffle-vagrant-env.git`
+  - `cd truffle-vagrant-env`
+  - `vagrant up`
+  - `vagrant ssh`
+  - `vagrant@vagrant-ubuntu-trusty-64:~$ testrpc`
+3. Compile the contracts `yarn truffle compile`
+4. Deploy the contracts `yarn truffle migrate`
+
+## Tests
+
+`yarn truffle test`
+
+![screen shot 2017-06-30 at 08 52 44](https://user-images.githubusercontent.com/1987013/27709773-82bbed44-5d71-11e7-8696-a394e5159b1f.png)
+
 ## Building and the frontend
 
 1. First run `truffle compile`, then run `truffle migrate` to deploy the contracts onto your network of choice (default "development").
-1. Then run `npm run dev` to build the app and serve it on http://localhost:8080
+2. Then run `npm run dev` to build the app and serve it on http://localhost:8080 (use :8081 for live reloading)
+
 
