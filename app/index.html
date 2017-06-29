@@ -9,19 +9,27 @@
   <h1>Message Stream</h1>
 
   <br>
+  
+  <div id="account-switcher-wrapper">
+    <label for="accoun-switcher">Select your account</label>
+    <select id="account-switcher">
+    </select>
+  </div>
 
-  <h3>You have <span class="black"><span id="balance"></span> META</span> in account <span class="black"><span id="account"></span></h3>
+  <div id="balance-wrapper">
+    <h3>You have <span class="black"><span id="balance"></span> META</span> in account <span class="black"><span id="account"></span></h3>
+  </div>
 
+  <div id="message-sender">
+    <h1>Send Message</h1>
+    <br><label for="title">Title:</label><input type="text" id="title" placeholder="e.g., Hello World"></input>
+    <br><label for="_body">Body:</label>
+        <input type="text" id="_body" placeholder="e.g., The body of your lovely message :)"></input>
 
-  <h1>Send Message</h1>
-  <br><label for="title">Title:</label><input type="text" id="title" placeholder="e.g., Hello World"></input>
-  <br><label for="_body">Body:</label>
-      <input type="text" id="_body" placeholder="e.g., The body of your lovely message :)"></input>
-
-  <br><br><button id="send" onclick="App.sendMessage()">Send Message</button>
-  <br><br>
-  <span id="status"></span>
-  <br>
+    <br><br><button id="send" onclick="App.sendMessage()">Send Message</button>
+    <br><br>
+    <span id="status"></span>
+  </div>
 
   <div id="messages_wrapper">
     <h2>Received Messages</h2>

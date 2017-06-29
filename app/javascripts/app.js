@@ -39,18 +39,25 @@ window.App = {
       account = accounts[0];
 
       self.refreshBalance();
+      self.populateAccoutSwitcherHTML();
 
     });
 
     var self = this;
+    var eventReceived = false;
     MessageStream.deployed().then(function(instance) {
       instance.MessageReceived().watch(function(err, result) {
+        console.log("event received");
         if(err) {return;}
         self.getMessages();
       })
     });
+  },
 
-
+  switchAccount: function(index) {
+    account = accounts[index];
+    this.refreshBalance();
+    this.getMessages();
   },
 
   refreshBalance: function() {
@@ -63,12 +70,7 @@ window.App = {
 
     var account_element = document.getElementById("account");
     account_element.innerHTML = account;
-
   },
-
-  // getMessage: function(instance, index) {
-  //   return instance.getMessage.call(index);
-  // },
 
   getMessages: function() {
     var self = this;
@@ -88,11 +90,10 @@ window.App = {
           return Promise.all(promises);
 
         }).then(function(results) {
-          console.log("Results: " + results);
-          
           self.clearMessagesHTML();
           for (var i = 0; i < results.length; i++) {
-            self.prependMessagesHTML(results[i][0], results[i][1]);
+            var result = results[i];
+            self.prependMessagesHTML(i, result[0], result[1], result[2], result[3]);
           }
         });
   },
@@ -111,16 +112,54 @@ window.App = {
     })
   },
 
+  likeMessage: function(index) {
+    console.log("Like:"+index);
+    var self  = this;
+    MessageStream.deployed().then(function(instance) {
+      return instance.likeMessage(index, {from: account, gas: 3000000})
+    }).catch(function() {
+      alert("You can not like your own message!");
+    }).then(function(result) {
+      if(!result) { return; }
+      self.getMessages();
+    });
+  },
+
+  populateAccoutSwitcherHTML: function() {
+    var self = this;
+    var accountSwitcher = document.getElementById("account-switcher");
+    accounts.forEach(function(item, index) {
+      var option = document.createElement("option");
+      option.value = index;
+      option.innerHTML = account;
+      accountSwitcher.appendChild(option);
+    });
+
+    accountSwitcher.addEventListener('change', function(evt) {
+      self.switchAccount(this.value);
+    });
+  },
+
   clearMessagesHTML: function() {
     var list = document.getElementById("messages");
     list.innerHTML = "";
   },
 
-  prependMessagesHTML: function(title, body) {
+  prependMessagesHTML: function(index, title, body, created_at, likes) {
+    var self = this;
     var list = document.getElementById("messages");
-    var el = document.createElement("li")
-      el.innerHTML = title+ ": "+ body;
-    list.insertBefore(el, list.childNodes[0]);
+    var imageEl = document.createElement("li");
+    var likeButton = document.createElement("button");
+    likeButton.value = index;
+    likeButton.innerHTML = likes+" Likes";
+
+    likeButton.addEventListener('click', function(evt) {
+      self.likeMessage(this.value);
+    });
+
+    imageEl.innerHTML = title+ ": "+ body;
+    imageEl.appendChild(likeButton);
+    list.insertBefore(imageEl, list.childNodes[0]);
   }
 };
 
