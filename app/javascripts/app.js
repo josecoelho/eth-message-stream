@@ -44,11 +44,13 @@ window.App = {
 
     var self = this;
     MessageStream.deployed().then(function(instance) {
-      instance.GetMessage.watch(function(err, result) {
+      instance.MessageReceived().watch(function(err, result) {
         if(err) {return;}
-        self.messageReceved(result.args.title, result.args.body);
+        self.getMessages();
       })
     });
+
+
   },
 
   refreshBalance: function() {
@@ -64,17 +66,35 @@ window.App = {
 
   },
 
+  // getMessage: function(instance, index) {
+  //   return instance.getMessage.call(index);
+  // },
 
   getMessages: function() {
     var self = this;
 
-    
-    MessageStream.deployed().then(function(instance) {
-      instance.MessageReceived().watch(function(err, result) {
-        if(err) {return;}
-        self.messageReceved(result.args.title, result.args.body);
-      })
-    });
+    var instance;
+    var promises = [];
+
+    MessageStream.deployed().then(function(_instance) {
+          instance = _instance;
+          return instance.getNumberOfMessages.call()
+        }).then(function(count) {
+
+          for (var i = 0; i < count; i++) {
+              promises[i] = instance.getMessage.call(i);
+          }
+
+          return Promise.all(promises);
+
+        }).then(function(results) {
+          console.log("Results: " + results);
+          
+          self.clearMessagesHTML();
+          for (var i = 0; i < results.length; i++) {
+            self.prependMessagesHTML(results[i][0], results[i][1]);
+          }
+        });
   },
 
   setStatus: function(message) {
@@ -91,11 +111,16 @@ window.App = {
     })
   },
 
-  messageReceved: function(title, body) {
-    var messages = document.getElementById("messages");
+  clearMessagesHTML: function() {
+    var list = document.getElementById("messages");
+    list.innerHTML = "";
+  },
+
+  prependMessagesHTML: function(title, body) {
+    var list = document.getElementById("messages");
     var el = document.createElement("li")
       el.innerHTML = title+ ": "+ body;
-    messages.appendChild(el);
+    list.insertBefore(el, list.childNodes[0]);
   }
 };
 
